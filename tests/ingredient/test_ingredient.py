@@ -1,6 +1,25 @@
-from src.models.ingredient import Ingredient  # noqa: F401, E261, E501
+from src.models.ingredient import Ingredient, Restriction
 
 
-# Req 1
 def test_ingredient():
-    pass
+    ingredients = {
+        "queijo mussarela": {
+            "name": "queijo mussarela",
+            "restrictions": {Restriction.LACTOSE, Restriction.ANIMAL_DERIVED},
+        },
+        "farinha": {"name": "farinha", "restrictions": {Restriction.GLUTEN}},
+    }
+
+    for name, expected_values in ingredients.items():
+        ingredient = Ingredient(name)
+
+        assert ingredient.name == expected_values["name"]
+
+        assert set(ingredient.restrictions) == expected_values["restrictions"]
+
+        assert repr(ingredient) == f"Ingredient('{expected_values['name']}')"
+
+        same_ingredient = Ingredient(name)
+        assert ingredient == same_ingredient
+
+        assert hash(ingredient) == hash(same_ingredient)

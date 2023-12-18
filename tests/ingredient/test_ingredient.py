@@ -2,24 +2,19 @@ from src.models.ingredient import Ingredient, Restriction
 
 
 def test_ingredient():
-    ingredients = {
-        "queijo mussarela": {
-            "name": "queijo mussarela",
-            "restrictions": {Restriction.LACTOSE, Restriction.ANIMAL_DERIVED},
-        },
-        "farinha": {"name": "farinha", "restrictions": {Restriction.GLUTEN}},
-    }
+    ingredient = Ingredient("queijo mussarela")
 
-    for name, expected_values in ingredients.items():
-        ingredient = Ingredient(name)
+    assert isinstance(ingredient, Ingredient)
 
-        assert ingredient.name == expected_values["name"]
+    assert ingredient.name == "queijo mussarela"
 
-        assert set(ingredient.restrictions) == expected_values["restrictions"]
+    expected_restrictions = {Restriction.LACTOSE, Restriction.ANIMAL_DERIVED}
+    assert set(ingredient.restrictions) == expected_restrictions
 
-        assert repr(ingredient) == f"Ingredient('{expected_values['name']}')"
+    assert repr(ingredient) == "Ingredient('queijo mussarela')"
 
-        same_ingredient = Ingredient(name)
-        assert ingredient == same_ingredient
+    assert ingredient == Ingredient("queijo mussarela")
+    assert not (ingredient == Ingredient("frango"))
 
-        assert hash(ingredient) == hash(same_ingredient)
+    assert hash(ingredient) == hash(Ingredient("queijo mussarela"))
+    assert hash(ingredient) != hash(Ingredient("frango"))
